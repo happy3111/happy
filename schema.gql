@@ -1,0 +1,622 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+directive @upper on FIELD_DEFINITION
+
+"""country """
+type Country {
+  id: ID!
+  code: String!
+  name: String!
+}
+
+"""city """
+type City {
+  id: ID!
+  name: String!
+  country_id: Float!
+  country: Country
+}
+
+"""asn """
+type ASN {
+  id: ID!
+  code: String!
+  name: String!
+}
+
+"""prefix """
+type Prefix {
+  id: ID!
+  datacenter_id: Float!
+  value: String!
+  status: String!
+  ip_range_ini: Float!
+  ip_range_end: Float!
+  datacenter: DataCenter
+}
+
+"""datacenter """
+type DataCenter {
+  id: ID!
+  asn_id: Float!
+  city_id: Float!
+  ipfix: String
+  port: Float
+  protocol: String
+  status: String!
+  city: City
+  asn: ASN
+  prefixes: [Prefix!]
+}
+
+"""serverIp """
+type ServerIp {
+  id: ID!
+  ip: String!
+  version: String!
+  server_id: Float!
+  server: Server!
+}
+
+"""DataCenter_Server """
+type DataCenterServer {
+  datacenter_id: Float!
+  server_id: Float!
+  rtt: Float!
+  datacenter: DataCenter
+  server: Server
+}
+
+"""hosting_company """
+type HostingCompany {
+  id: ID!
+  company_name: String!
+  portal_url: String!
+  api_url: String
+  api_token: String
+  api_doc: String
+  created_at: DateTime!
+  updated_at: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+"""server """
+type Server {
+  id: Float!
+  hostname: String
+  is_nat: Float
+  datacenter_id: Float
+  zabbix_hostid: String
+  hosting_company_id: Float
+  type: String
+  billing_type: String
+  price: Float
+  bandwidth_limit: Float
+  bridge: Bridge
+  ips(offset: Int! = 0, limit: Int! = 25, filter: ServerIpFilter, exactMatch: Boolean! = false): [ServerIp!]
+  datacenter: DataCenter
+  datacenter_servers: [DataCenterServer!]
+  hosting_company: HostingCompany
+}
+
+input ServerIpFilter {
+  ip: String
+  version: Float
+}
+
+"""Application_Datacenter """
+type ApplicationDatacenter {
+  id: ID!
+  application_id: Float!
+  datacenter_id: Float!
+  application: Application
+  datacenter: DataCenter
+}
+
+"""Application_Final """
+type ApplicationFinal {
+  applications_id: Float!
+  final_id: Float!
+  application: Application
+  final: Final
+}
+
+"""Application_Icon """
+type ApplicationIcon {
+  id: ID!
+  filename: String!
+  md5: String!
+}
+
+"""application """
+type Application {
+  id: ID!
+  name: String!
+  category: String!
+  tag: String!
+  os: String!
+  proxy_rules: String!
+  proxy_rules_ext: String
+  protocol: String!
+  applications_icons_id: Float!
+  send_direct_rtt: Float!
+  automatic: Float!
+  store_icons_id: Float
+  datacenters: [DataCenter!]
+  finals: [Final!]
+  icon: ApplicationIcon
+}
+
+"""final """
+type Final {
+  id: ID!
+  order: Float!
+  name: String!
+  alias: String!
+  group_alias: String
+  tcp_port: Float!
+  udp_port: Float!
+  wi_port: Float!
+  wi_password: String!
+  max_connections: Float!
+  max_files: Float!
+  downstream_limit: Float!
+  user_cache_reloading_interval: Float!
+  is_nat: Float!
+  proxify_ipv6: Float!
+  hidden: Float!
+  is_proxy: Float!
+  threads: Float!
+  password: String!
+  zabbix_hostid: Float
+  datacenter_id: Float!
+  logging: Float!
+  server_id: Float!
+  datacenter: DataCenter
+  server: Server
+  applications: [Application!]
+  final_bridges: [FinalBridge!]
+}
+
+"""Final_Bridge_Latency """
+type FinalBridge {
+  final_id: Float!
+  bridges_id: Float!
+  latency: Float!
+  online: Float!
+  final: Final
+  bridge: Bridge
+}
+
+"""bridge """
+type Bridge {
+  id: ID!
+  name: String!
+  group: Float
+  group_alias: String
+  ip: String
+  ipv6: String
+  tcp_port: Float!
+  udp_port: Float!
+  wi_port: Float!
+  wi_password: String!
+  logging: Float!
+  max_files: Float!
+  user_cache_reloading_interval: Float!
+  threads: Float!
+  ddos_protection: Float!
+  zabbix_hostid: String
+  server_id: Float!
+  server: Server
+  final_bridges: [FinalBridge!]
+}
+
+"""Bridge_Latency """
+type BridgeLatency {
+  bridge_src_id: Float!
+  bridge_dst_id: Float!
+  latency: Float!
+  bridge_src: Bridge
+  bridge_dst: Bridge
+}
+
+"""auth """
+type User {
+  id: ID!
+  username: String!
+  role: String!
+  apikey: String!
+}
+
+"""actionLog """
+type ActionLog {
+  id: ID!
+  schema: String!
+  action: String!
+  target_id: Float!
+  user_id: Float!
+  user: User!
+  changed_fields: [FieldLog!]!
+  createdAt: DateTime!
+}
+
+"""fieldLog """
+type FieldLog {
+  id: ID!
+  action_log_id: Float!
+  field: String!
+  old_value: String!
+  new_value: String!
+}
+
+"""authToken """
+type AuthToken {
+  token: String!
+  expiresAt: Float!
+}
+
+type Query {
+  actionLog(id: String!): ActionLog!
+  actionLogs(offset: Int! = 0, limit: Int! = 25, filter: ActionLogFilter, exactMatch: Boolean! = false): [ActionLog!]!
+  serverIp(id: String!): ServerIp!
+  serverIps(offset: Int! = 0, limit: Int! = 25, filter: ServerIpFilter, exactMatch: Boolean! = false): [ServerIp!]!
+  bridge(id: String!): Bridge!
+  bridges(offset: Int! = 0, limit: Int! = 25, filter: BridgeFilter, exactMatch: Boolean! = false): [Bridge!]!
+  server(id: String!): Server!
+  servers(offset: Int! = 0, limit: Int! = 25, filter: ServerFilter, exactMatch: Boolean! = false): [Server!]!
+  datacenter(id: String!): DataCenter!
+  datacenters(offset: Int! = 0, limit: Int! = 25, filter: DataCenterFilter, exactMatch: Boolean! = false): [DataCenter!]!
+  country(id: String!): Country!
+  countries(offset: Int! = 0, limit: Int! = 25, exactMatch: Boolean! = false): [Country!]!
+  city(id: String!): City!
+  cities(offset: Int! = 0, limit: Int! = 25, exactMatch: Boolean! = false): [City!]!
+  asn(id: String!): ASN!
+  asns(offset: Int! = 0, limit: Int! = 25, filter: AsnFilter, exactMatch: Boolean! = false): [ASN!]!
+  final(id: String!): Final!
+  finals(offset: Int! = 0, limit: Int! = 25, filter: FinalFilter, exactMatch: Boolean! = false): [Final!]!
+  datacenter_server(datacenter_id: String!, server_id: String!): DataCenterServer!
+  datacenter_servers(offset: Int! = 0, limit: Int! = 25, exactMatch: Boolean! = false): [DataCenterServer!]!
+  final_bridge(final_id: String!, bridges_id: String!): FinalBridge!
+  final_bridges(offset: Int! = 0, limit: Int! = 25, exactMatch: Boolean! = false): [FinalBridge!]!
+  application(id: String!): Application!
+  applications(offset: Int! = 0, limit: Int! = 25, filter: ApplicationFilter, exactMatch: Boolean! = false): [Application!]!
+  application_datacenter(application_id: String!, server_id: String!): ApplicationDatacenter!
+  application_datacenters(offset: Int! = 0, limit: Int! = 25, exactMatch: Boolean! = false): [ApplicationDatacenter!]!
+  application_final(applications_id: String!, final_id: String!): ApplicationFinal!
+  application_finals(offset: Int! = 0, limit: Int! = 25, exactMatch: Boolean! = false): [ApplicationFinal!]!
+  application_icon(applications_id: String!, final_id: String!): ApplicationIcon!
+  application_icons(offset: Int! = 0, limit: Int! = 25, exactMatch: Boolean! = false): [ApplicationIcon!]!
+  hosting_company(id: String!): HostingCompany!
+  hosting_companies(offset: Int! = 0, limit: Int! = 25, filter: HostingCompanyFilter, exactMatch: Boolean! = false): [HostingCompany!]!
+  prefix(id: String!): Prefix!
+  prefixes(offset: Int! = 0, limit: Int! = 25, filter: PrefixFilter, exactMatch: Boolean! = false): [Prefix!]!
+  bridge_latency(bridge_src_id: String!, bridge_dst_id: String!): BridgeLatency!
+  bridge_latencies(offset: Int! = 0, limit: Int! = 25, filter: BridgeLatencyFilter, exactMatch: Boolean! = false): [BridgeLatency!]!
+  auths: [User!]!
+}
+
+input ActionLogFilter {
+  name: String
+  alias: String
+}
+
+input BridgeFilter {
+  name: String
+}
+
+input ServerFilter {
+  hostname: String
+  ip: String
+  ip_version: Float
+}
+
+input DataCenterFilter {
+  asn_code: String
+  asn_name: String
+  city: String
+  country: String
+  ipfix: String
+}
+
+input AsnFilter {
+  code: String
+  name: String
+}
+
+input FinalFilter {
+  name: String
+  alias: String
+}
+
+input ApplicationFilter {
+  category: String
+  name: String
+  tag: String
+  os: String
+  proxy_rules: String
+}
+
+input HostingCompanyFilter {
+  company_name: String
+}
+
+input PrefixFilter {
+  ip: String
+}
+
+input BridgeLatencyFilter {
+  bridge_src_id: String
+  bridge_dst_id: String
+}
+
+type Mutation {
+  addServerIp(newServerIpData: ServerIpInput!): ServerIp!
+  removeServerIp(id: String!): Boolean!
+  updateServerIp(id: String!, serverIpData: ServerIpInput!): ServerIp!
+  addBridge(newBridgeData: BridgeInput!): Bridge!
+  removeBridge(id: String!): Boolean!
+  updateBridge(id: String!, bridgeData: BridgeInput!): Bridge!
+  addServer(newServerData: ServerInput!): Server!
+  removeServer(id: String!): Boolean!
+  updateServer(id: String!, serverData: ServerInput!): Server!
+  addDataCenter(newDataCenterData: DataCenterInput!): DataCenter!
+  removeDataCenter(id: String!): Boolean!
+  updateDataCenter(id: String!, datacenterData: DataCenterInput!): DataCenter!
+  addCountry(newCountryData: CountryInput!): Country!
+  removeCountry(id: String!): Boolean!
+  updateCountry(id: String!, countryData: CountryInput!): Country!
+  addCity(newCityData: CityInput!): City!
+  removeCity(id: String!): Boolean!
+  updateCity(id: String!, cityData: CityInput!): City!
+  addASN(newASNData: ASNInput!): ASN!
+  removeASN(id: String!): Boolean!
+  updateASN(id: String!, asnData: ASNInput!): ASN!
+  addFinal(newFinalData: FinalInput!): Final!
+  removeFinal(id: String!): Boolean!
+  updateFinal(id: String!, finalData: FinalInput!): Final!
+  addDataCenterServer(newDataCenterServerData: DataCenterServerInput!): DataCenterServer!
+  removeDataCenterServer(datacenter_id: String!, server_id: String!): Boolean!
+  updateDataCenterServer(id: String!, datacenter_serverData: DataCenterServerInput!): DataCenterServer!
+  addFinalBridge(newFinalBridgeData: FinalBridgeInput!): FinalBridge!
+  removeFinalBridge(final_id: String!, bridges_id: String!): Boolean!
+  updateFinalBridge(final_id: String!, bridges_id: String!, final_bridgeData: FinalBridgeInput!): FinalBridge!
+  updateFinalBridges(data: [FinalBridgeInput!]!): [FinalBridge!]!
+  addApplication(newApplicationData: ApplicationInput!): Application!
+  removeApplication(id: String!): Boolean!
+  updateApplication(id: String!, applicationData: ApplicationInput!): Application!
+  addApplicationDatacenter(newApplicationDatacenterData: ApplicationDatacenterInput!): ApplicationDatacenter!
+  removeApplicationDatacenter(application_id: String!, server_id: String!): Boolean!
+  updateApplicationDatacenter(id: String!, application_datacenterData: ApplicationDatacenterInput!): ApplicationDatacenter!
+  addApplicationFinal(newApplicationFinalData: ApplicationFinalInput!): ApplicationFinal!
+  removeApplicationFinal(applications_id: String!, final_id: String!): Boolean!
+  updateApplicationFinal(id: String!, application_finalData: ApplicationFinalInput!): ApplicationFinal!
+  addApplicationIcon(newApplicationIconData: ApplicationIconInput!): ApplicationIcon!
+  removeApplicationIcon(applications_id: String!, final_id: String!): Boolean!
+  updateApplicationIcon(id: String!, application_iconData: ApplicationIconInput!): ApplicationIcon!
+  addHostingCompany(newHostingCompanyData: HostingCompanyInput!): HostingCompany!
+  removeHostingCompany(id: String!): Boolean!
+  updateHostingCompany(id: String!, hostingCompanyData: HostingCompanyInput!): HostingCompany!
+  addPrefix(newPrefixData: PrefixInput!): Prefix!
+  removePrefix(id: String!): Boolean!
+  updatePrefix(id: String!, prefixData: PrefixInput!): Prefix!
+  addBridgeLatency(newBridgeLatencyData: BridgeLatencyInput!): BridgeLatency!
+  removeBridgeLatency(applications_id: String!, final_id: String!): Boolean!
+  updateBridgeLatency(id: String!, bridge_latencyData: BridgeLatencyInput!): BridgeLatency!
+  updateBridgeLatencies(data: [BridgeLatencyInput!]!): [BridgeLatency!]!
+  signin(signinArgs: SigninArgs!): AuthToken!
+  changePassword(oldPassword: String!, newPassword: String!): Boolean!
+}
+
+input ServerIpInput {
+  ip: String
+  version: String
+  server_id: Float
+}
+
+input BridgeInput {
+  name: String
+  group: Float
+  group_alias: String
+  ip: String
+  ipv6: String
+  tcp_port: Float
+  udp_port: Float
+  wi_port: Float
+  wi_password: String
+  logging: Float
+  max_files: Float
+  user_cache_reloading_interval: Float
+  threads: Float
+  ddos_protection: Float
+  zabbix_hostid: String
+  server_id: Float
+}
+
+input ServerInput {
+  hostname: String
+  is_nat: Float
+  datacenter_id: Float
+  zabbix_hostid: String
+  hosting_company_id: Float
+  type: String
+  billing_type: String
+  price: Float
+  bandwidth_limit: Float
+  ips: [ServerIpInput2!]
+}
+
+input ServerIpInput2 {
+  ip: String
+  version: String
+}
+
+input DataCenterInput {
+  asn_id: Float
+  city_id: Float
+  ipfix: String
+  port: Float
+  protocol: String
+  status: String
+  prefixes: [PrefixInput2!]
+}
+
+input PrefixInput2 {
+  value: String
+  status: String = "Pending"
+  ip_range_ini: Float
+  ip_range_end: Float
+}
+
+input CountryInput {
+  code: String
+  name: String
+}
+
+input CityInput {
+  name: String
+  country_id: Float
+}
+
+input ASNInput {
+  code: String
+  name: String
+}
+
+input FinalInput {
+  order: Float
+  name: String
+  alias: String
+  group_alias: String
+  tcp_port: Float
+  udp_port: Float
+  wi_port: Float
+  wi_password: String
+  max_connections: Float
+  max_files: Float
+  downstream_limit: Float
+  user_cache_reloading_interval: Float
+  is_nat: Float
+  proxify_ipv6: Float
+  hidden: Float
+  is_proxy: Float
+  threads: Float
+  password: String
+  zabbix_hostid: Float
+  datacenter_id: Float
+  logging: Float
+  server_id: Float
+}
+
+input DataCenterServerInput {
+  datacenter_id: Float
+  server_id: Float
+  rtt: Float
+}
+
+input FinalBridgeInput {
+  final_id: Float
+  bridges_id: Float
+  latency: Float
+  online: Float
+}
+
+input ApplicationInput {
+  name: String
+  category: String
+  tag: String
+  os: String
+  proxy_rules: String
+  proxy_rules_ext: String
+  protocol: String
+  applications_icons_id: Float
+  send_direct_rtt: Float
+  automatic: Float
+  store_icons_id: Float
+}
+
+input ApplicationDatacenterInput {
+  application_id: Float
+  datacenter_id: Float
+}
+
+input ApplicationFinalInput {
+  applications_id: Float
+  final_id: Float
+}
+
+input ApplicationIconInput {
+  filename: String
+  md5: String
+}
+
+input HostingCompanyInput {
+  company_name: String
+  portal_url: String
+  api_url: String
+  api_token: String
+  api_doc: String
+}
+
+input PrefixInput {
+  datacenter_id: Float
+  value: String
+  status: String
+  ip_range_ini: Float
+  ip_range_end: Float
+}
+
+input BridgeLatencyInput {
+  bridge_src_id: Float
+  bridge_dst_id: Float
+  latency: Float
+}
+
+input SigninArgs {
+  username: String!
+  password: String!
+}
+
+type Subscription {
+  serverIpAdded: ServerIp!
+  serverIpUpdated: ServerIp!
+  bridgeAdded: Bridge!
+  bridgeUpdated: Bridge!
+  serverAdded: Server!
+  serverUpdated: Server!
+  datacenterAdded: DataCenter!
+  datacenterUpdated: DataCenter!
+  countryAdded: Country!
+  countryUpdated: Country!
+  cityAdded: City!
+  cityUpdated: City!
+  asnAdded: ASN!
+  asnUpdated: ASN!
+  finalAdded: Final!
+  finalUpdated: Final!
+  datacenter_serverAdded: DataCenterServer!
+  datacenter_serverUpdated: DataCenterServer!
+  final_bridgeAdded: FinalBridge!
+  final_bridgeUpdated: FinalBridge!
+  final_bridge_massUpdated: [FinalBridge!]!
+  applicationAdded: Application!
+  applicationUpdated: Application!
+  application_datacenterAdded: ApplicationDatacenter!
+  application_datacenterUpdated: ApplicationDatacenter!
+  application_finalAdded: ApplicationFinal!
+  application_finalUpdated: ApplicationFinal!
+  application_iconAdded: ApplicationIcon!
+  application_iconUpdated: ApplicationIcon!
+  hosting_companyAdded: HostingCompany!
+  hosting_companyUpdated: HostingCompany!
+  prefixAdded: Prefix!
+  prefixUpdated: Prefix!
+  bridge_latencyAdded: BridgeLatency!
+  bridge_latencyUpdated: BridgeLatency!
+  bridge_latency_massUpdated: [BridgeLatency!]!
+}

@@ -1,0 +1,47 @@
+export const serverDTO = {
+  hostname: 'Local',
+  is_nat: 0,
+  datacenter_id: 2,
+  zabbix_hostid: '1',
+  hosting_company_id: 1,
+  type: '1',
+  billing_type: '1',
+  price: 1,
+  bandwidth_limit: 1,
+};
+
+export const servers = [
+  {
+    hostname: 'Local',
+    is_nat: 0,
+    datacenter_id: 2,
+    zabbix_hostid: '1',
+    hosting_company_id: 1,
+    type: '1',
+    billing_type: '1',
+    price: 1,
+    bandwidth_limit: 1,
+  },
+  {
+    hostname: 'US Clifton',
+    is_nat: 0,
+    datacenter_id: 2,
+    zabbix_hostid: '1',
+    hosting_company_id: 2,
+    type: '1',
+    billing_type: '1',
+    price: 1,
+    bandwidth_limit: 1,
+  },
+  {
+    hostname: 'DE Frankfurt',
+    is_nat: 0,
+    datacenter_id: 1359,
+    zabbix_hostid: '1',
+    hosting_company_id: 1,
+    type: '1',
+    billing_type: '1',
+    price: 1,
+    bandwidth_limit: 1,
+  },
+];
