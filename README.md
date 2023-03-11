@@ -13,7 +13,6 @@
 ```bash
 $ npm install
 ```
-
 ## Running the app
 
 Copy .env.sample into .env, update .env file.
